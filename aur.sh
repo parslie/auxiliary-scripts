@@ -4,9 +4,13 @@ DIR=$HOME/AUR
 MODE=$1
 PKG=$2
 
+NORMAL="\033[0;0m"
+SUCCESS="\033[0;32m"
+ERROR="\033[0;31m"
+
 if [ -z $MODE ]
 then
-    echo "ERROR: You need to select a mode! Try 'aur help'!"
+    echo -e "${ERROR}ERROR${NORMAL}: You need to select a mode! Try 'aur help'!"
     exit 1
 fi
 
@@ -22,7 +26,7 @@ if [ $MODE = install ] || [ $MODE = i ]
 then
     if [ $# != 2 ]
     then
-        echo "ERROR: You need to specify a package to install!"
+        echo -e "${ERROR}ERROR${NORMAL}: You need to specify a package to install!"
         exit 1
     fi
 
@@ -36,7 +40,7 @@ then
         cd $DIR
         rm -rf $DIR/$PKG
 
-        echo "ERROR: Could not clone package!"
+        echo -e "${ERROR}ERROR${NORMAL}: Could not clone package!"
         exit 1
     fi
     cd $DIR/$PKG
@@ -47,7 +51,7 @@ then
         cd $DIR
         rm -rf $DIR/$PKG
 
-        echo "ERROR: Could not make package!"
+        echo -e "${ERROR}ERROR${NORMAL}: Could not make package!"
         exit 1
     fi 
 
@@ -62,14 +66,14 @@ if [ $MODE = uninstall ] || [ $MODE = u ]
 then
     if [ $# != 2 ]
     then
-        echo "ERROR: You need to specify a package to uninstall!"
+        echo -e "${ERROR}ERROR${NORMAL}: You need to specify a package to uninstall!"
         exit 1
     fi
 
     # Uninstall package
     if [ ! -f $DIR/$PKG ]
     then
-        echo "ERROR: The package '$PKG' is not installed!"
+        echo -e "${ERROR}ERROR${NORMAL}: The package '$PKG' is not installed!"
         exit 1
     fi
     sudo pacman -R $PKG
@@ -84,7 +88,7 @@ if [ $MODE = query ] || [ $MODE = q ]
 then
     if [ $# != 1 ]
     then
-        echo "ERROR: If you want to query for specific packages, use grep!"
+        echo -e "${ERROR}ERROR${NORMAL}: If you want to query for specific packages, use grep!"
         exit 1
     fi
 
@@ -94,5 +98,5 @@ then
     exit 0
 fi
 
-echo "ERROR: You've selected an invalid mode! Try 'aur help'"
+echo -e "${ERROR}ERROR${NORMAL}: You've selected an invalid mode! Try 'aur help'"
 exit 1
