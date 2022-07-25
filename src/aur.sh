@@ -1,12 +1,12 @@
 #!/bin/bash
 
-DIR=$HOME/AUR
+AURDIR=$HOME/AUR
 MODE=$1
 PKG=$2
 
 NORMAL="\033[0;0m"
-SUCCESS="\033[0;32m"
-ERROR="\033[0;31m"
+SUCCESS="\033[1;32m"
+ERROR="\033[1;31m"
 
 if [ -z $MODE ]
 then
@@ -31,33 +31,33 @@ then
     fi
 
     # Create necessary AUR directory
-    mkdir -p $DIR
-    cd $DIR
+    mkdir -p $AURDIR
+    cd $AURDIR
 
     # Clone package
     if ! git clone https://aur.archlinux.org/$PKG.git
     then
-        cd $DIR
-        rm -rf $DIR/$PKG
+        cd $AURDIR
+        rm -rf $AURDIR/$PKG
 
         echo -e "${ERROR}ERROR${NORMAL}: Could not clone package!"
         exit 1
     fi
-    cd $DIR/$PKG
+    cd $AURDIR/$PKG
 
     # Make & install package
     if ! makepkg -sri
     then
-        cd $DIR
-        rm -rf $DIR/$PKG
+        cd $AURDIR
+        rm -rf $AURDIR/$PKG
 
         echo -e "${ERROR}ERROR${NORMAL}: Could not make package!"
         exit 1
     fi 
 
     # Create entry in AUR directory
-    rm -rf $DIR/$PKG
-    touch $DIR/$PKG
+    rm -rf $AURDIR/$PKG
+    touch $AURDIR/$PKG
 
     exit 0
 fi
@@ -71,7 +71,7 @@ then
     fi
 
     # Uninstall package
-    if [ ! -f $DIR/$PKG ]
+    if [ ! -f $AURDIR/$PKG ]
     then
         echo -e "${ERROR}ERROR${NORMAL}: The package '$PKG' is not installed!"
         exit 1
@@ -79,7 +79,7 @@ then
     sudo pacman -R $PKG
 
     # Remove entry in AUR directory
-    rm $DIR/$PKG -f
+    rm $AURDIR/$PKG -f
 
     exit 0
 fi
@@ -93,7 +93,7 @@ then
     fi
 
     # Print all packages line-by-line
-    ls $DIR -w 1
+    ls $AURDIR -w 1
 
     exit 0
 fi
